@@ -20,33 +20,39 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping
-    public BookResponseDTO createBook(@RequestBody BookRequestDTO bookRequestDTO) {
-        return bookService.createBook(bookRequestDTO);
+    public ResponseEntity<BookResponseDTO> createBook(@RequestBody BookRequestDTO bookRequestDTO) {
+       BookResponseDTO bookCriado = bookService.createBook(bookRequestDTO);
+       return ResponseEntity.status(HttpStatus.CREATED).body(bookCriado);
     }
 
     @GetMapping
-    public List<BookResponseDTO> listarBooks() {
-        return bookService.listarBooks();
+    public ResponseEntity<List<BookResponseDTO>> listarBooks() {
+        List<BookResponseDTO> bookList = bookService.listarBooks();
+        return ResponseEntity.status(HttpStatus.OK).body(bookList);
     }
 
     @GetMapping("/{id}")
-    public BookResponseDTO listarBookById(@PathVariable Long id) {
-        return bookService.listarBookPorId(id);
+    public ResponseEntity<BookResponseDTO> listarBookById(@PathVariable Long id) {
+        BookResponseDTO bookEncontrado = bookService.listarBookPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(bookEncontrado);
     }
 
     @GetMapping("/titulo")
-    public BookResponseDTO listarBookByTitulo(@RequestParam (value = "titulo", required = true)String titulo) {
-        return bookService.listarBookPorTitulo(titulo);
+    public ResponseEntity<BookResponseDTO> listarBookByTitulo(@RequestParam (value = "titulo", required = true)String titulo) {
+        BookResponseDTO bookEncontrado = bookService.listarBookPorTitulo(titulo);
+        return ResponseEntity.status(HttpStatus.OK).body(bookEncontrado);
     }
 
     @PutMapping("/{id}") //retomar erro personalizado para nao envio do RequestBody
-    public BookResponseDTO atualizarBook(@PathVariable Long id, @Valid @RequestBody Book book) {
-        return bookService.atualizarBook(book, id);
+    public ResponseEntity<BookResponseDTO> atualizarBook(@PathVariable Long id, @Valid @RequestBody Book book) {
+        BookResponseDTO bookAtualizado = bookService.atualizarBook(book, id);
+        return ResponseEntity.status(HttpStatus.OK).body(bookAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public void deletarBook(@Valid @PathVariable Long id) {
+    public ResponseEntity deletarBook(@Valid @PathVariable Long id) {
         bookService.deletarBook(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 
